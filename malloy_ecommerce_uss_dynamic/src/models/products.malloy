@@ -1,0 +1,23 @@
+source: products is bigquery.table('bigquery-public-data.thelook_ecommerce.products') extend {
+  
+  primary_key: product_id
+
+  // Dimensions (Only including renames/transformations)
+  dimension: 
+    product_id is id,
+    product_name is name
+
+  // Measures
+  measure: 
+    product_count is count()
+
+  // Named Query (Equivalent to Looker's Drill Fields)
+  view: detail is {
+    select: 
+      product_id,
+      product_name,
+      brand,       // Inherited automatically from the table
+      category,    // Inherited automatically from the table
+      retail_price // Inherited automatically from the table
+  }
+}

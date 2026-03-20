@@ -1,0 +1,49 @@
+import "events.malloy"
+
+source: event_session_facts is events -> {
+  // STAGE 1: Use 'select' (not project) to keep row-level detail for analytics
+  select: 
+    session_id,
+    identifier is coalesce(user_id::string, ip_address),
+    event_type,
+    created_at
+  
+  // Calculate window functions at the event level
+  calculate: 
+    session_start is first_value(created_at) { 
+      partition_by: session_id; order_by: created_at 
+    }
+    session_end is last_value(created_at) { 
+      partition_by: session_id; order_by: created_at 
+    }
+    session_landing_page is first_value(event_type) { 
+      partition_by: session_id; order_by: created_at 
+    }
+    session_exit_page is last_value(event_type) { 
+      partition_by: session_id; order_by: created_at 
+    }
+} -> {
+  // STAGE 2: Group by the session-level fields to collapse the grain
+  group_by: 
+    session_id,
+    identifier,
+    session_start,
+    session_end,
+    session_landing_page,
+    session_exit_page
+} extend {
+  primary_key: session_id
+
+  measure: 
+    session_count is count()
+
+  view: detail is {
+    select: 
+      session_id,
+      identifier,
+      session_start,
+      session_end,
+      session_landing_page,
+      session_exit_page
+  }
+}

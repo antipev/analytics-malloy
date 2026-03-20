@@ -1,0 +1,43 @@
+import "events.malloy"
+
+source: event_session_facts is events -> {
+  group_by: 
+    Session_id
+    `Identifier` is coalesce(cast(User_id as string), Ip_address)
+    Created_at
+    Event_type
+  
+  calculate:
+    `Session_start` is first_value(Created_at) { 
+      partition_by: Session_id 
+      order_by: Created_at asc 
+    }
+    `Session_end` is last_value(Created_at) { 
+      partition_by: Session_id 
+      order_by: Created_at asc
+    }
+    `Session_landing_page` is first_value(Event_type) { 
+      partition_by: Session_id 
+      order_by: Created_at asc 
+    }
+    `Session_exit_page` is last_value(Event_type) { 
+      partition_by: Session_id 
+      order_by: Created_at asc 
+    }
+} -> {
+  group_by: 
+    Session_id, 
+    Identifier, 
+    Session_start, 
+    Session_end, 
+    Session_landing_page, 
+    Session_exit_page
+} extend {
+  primary_key: Session_id
+
+  measure: `count` is count()
+
+  view: detail is {
+    select: Session_id, Identifier, Session_start, Session_end, Session_landing_page, Session_exit_page
+  }
+}

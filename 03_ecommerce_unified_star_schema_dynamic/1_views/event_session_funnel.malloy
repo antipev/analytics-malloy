@@ -1,0 +1,45 @@
+import "events.malloy"
+
+source: event_session_funnel is events -> {
+  group_by: 
+    Session_id
+  aggregate:
+    `Event1_time` is min(Created_at) { where: Event_type = 'Product' }
+    `Event2_time` is min(Created_at) { where: Event_type = 'Cart' }
+    `Event3_time` is min(Created_at) { where: Event_type = 'Purchase' }
+} extend {
+  primary_key: Session_id
+
+  // Dimensions
+  dimension: 
+    Event1_before_event2 is Event1_time < Event2_time
+    Event2_before_event3 is Event2_time < Event3_time
+    Time_in_funnel is hours(Event1_time to coalesce(Event3_time, Event2_time))
+
+  // Measures
+  measure: 
+    `count` is count()
+    count_sessions is count(Session_id)
+    
+    count_sessions_event1 is count(Session_id) { 
+      where: Event1_time is not null 
+    }
+    
+    count_sessions_event12 is count(Session_id) { 
+      where: Event1_time is not null 
+        and Event2_time is not null 
+        and Event1_before_event2 = true
+    }
+    
+    count_sessions_event123 is count(Session_id) { 
+      where: Event1_time is not null 
+        and Event2_time is not null 
+        and Event3_time is not null 
+        and Event1_before_event2 = true 
+        and Event2_before_event3 = true
+    }
+
+  view: detail is {
+    select: Session_id, Event1_time, Event2_time, Event3_time
+  }
+}

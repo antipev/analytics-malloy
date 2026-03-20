@@ -1,0 +1,25 @@
+source: events is bigquery.table('bigquery-public-data.thelook_ecommerce.events') extend {
+
+  primary_key: Id
+
+  rename:
+    `Id`              is id
+    `User_id`         is user_id
+    `Sequence_number` is sequence_number
+    `Session_id`      is session_id
+    `Created_at`      is created_at
+    `Ip_address`      is ip_address
+    `City`            is city
+    `State`           is state
+    `Postal_code`     is postal_code
+    `Browser`         is browser
+    `Traffic_source`  is traffic_source
+    `Uri`             is uri
+    `Event_type`      is event_type
+
+  measure: `count` is count()
+
+  view: detail is {
+    select: Id, User_id, Sequence_number, Session_id, Created_at, Ip_address, City, State, Postal_code, Browser, Traffic_source, Uri, Event_type
+  }
+}

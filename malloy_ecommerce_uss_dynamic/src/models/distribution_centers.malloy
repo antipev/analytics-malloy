@@ -1,0 +1,10 @@
+source: distribution_centers is bigquery.table('bigquery-public-data.thelook_ecommerce.distribution_centers') extend {
+  primary_key: distribution_center_id
+  dimension: distribution_center_id is id
+
+  measure: center_count is count()
+
+  view: detail is {
+    select: distribution_center_id, name, latitude, longitude
+  }
+}

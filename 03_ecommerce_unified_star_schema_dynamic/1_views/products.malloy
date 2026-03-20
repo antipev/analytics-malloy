@@ -1,0 +1,21 @@
+source: products is bigquery.table('bigquery-public-data.thelook_ecommerce.products') extend {
+
+  primary_key: Id
+
+  rename:
+    `Id`                     is id
+    `Brand`                  is brand
+    `Category`               is category
+    `Cost`                   is cost
+    `Department`             is department
+    `Distribution_center_id` is distribution_center_id
+    `Name`                   is name
+    `Retail_price`           is retail_price
+    `Sku`                    is sku
+
+  measure: `count` is count()
+
+  view: detail is {
+    select: Id, Name, Brand, Category, Department, Retail_price
+  }
+}

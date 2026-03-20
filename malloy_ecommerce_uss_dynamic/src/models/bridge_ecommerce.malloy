@@ -1,0 +1,9 @@
+source: bridge_ecommerce is bigquery.sql("""
+  SELECT  "events" AS stage,
+  UNION ALL
+  SELECT  "order_items" AS stage
+
+""")  extend {
+  primary_key: stage
+  
+}

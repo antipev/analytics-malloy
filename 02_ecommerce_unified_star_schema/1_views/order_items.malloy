@@ -1,0 +1,29 @@
+source: order_items is bigquery.table('bigquery-public-data.thelook_ecommerce.order_items') extend {
+
+  primary_key: Order_item_id
+
+  rename:
+    `Order_item_id`     is id
+    `Created_at`        is created_at
+    `Delivered_at`      is delivered_at
+    `Inventory_item_id` is inventory_item_id
+    `Order_id`          is order_id
+    `Product_id`        is product_id
+    `Returned_at`       is returned_at
+    `Sale_price`        is sale_price
+    `Shipped_at`        is shipped_at
+    `Status`            is status
+    `User_id`           is user_id
+
+  measure: 
+    average_sale_price                  is avg(Sale_price)
+    ordered_items_count                 is count(Product_id)
+    order_item_count                    is count()
+    order_count                         is count(Order_id)
+    total_revenue                       is sum(Sale_price)
+    total_revenue_from_completed_orders is sum(Sale_price) { where: Status = 'Complete' }
+
+  view: detail is {
+    select: Order_item_id, User_id, Inventory_item_id, Sale_price, Status, Created_at
+  }
+}

@@ -1,0 +1,12 @@
+import "../1_views/events.malloy"
+import "../1_views/event_session_facts.malloy"
+import "../1_views/event_session_funnel.malloy"
+import "../1_views/users.malloy"
+
+// Defining the Explore structure as a source
+source: events_explore is events extend {
+  join_one: 
+    event_session_facts on Session_id = event_session_facts.Session_id
+    event_session_funnel on Session_id = event_session_funnel.Session_id
+    users on User_id = users.Id
+}

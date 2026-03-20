@@ -1,0 +1,42 @@
+##! experimental {join_types}
+
+import "../1_views/bridge.malloy" 
+
+
+import "../1_views/order_items.malloy"
+import "../1_views/users.malloy"
+import "../1_views/inventory_items.malloy"
+import "../1_views/products.malloy"
+import "../1_views/distribution_centers.malloy"
+import "../1_views/events.malloy"
+import "../1_views/event_session_facts.malloy"
+import "../1_views/event_session_funnel.malloy"
+
+
+source: ecommerce_explore is bridge extend {
+
+   join_one: order_items               on stage = "order_items" 
+   join_one: events                    on stage = "events"
+ 
+   join_one: users                full on users.Id = coalesce(order_items.User_id, events.User_id) // selects only ids that exist in fact tables!!
+   join_one: inventory_items      full on order_items.Inventory_item_id = inventory_items.Id
+   join_one: products             full on inventory_items.Product_id = products.Id
+   join_one: distribution_centers full on products.Distribution_center_id = distribution_centers.Id
+  
+   join_one: event_session_facts       on stage = "events" and events.Session_id = event_session_facts.Session_id
+   join_one: event_session_funnel      on stage = "events" and events.Session_id = event_session_funnel.Session_id
+
+  measure:
+    conversion is pick order_items.order_count
+                             / events.`count`  
+                            
+                  when events.`count` != 0
+                  else 0
+
+}
+
+run: ecommerce_explore -> {
+  group_by: products.Id
+  aggregate: order_items.order_count
+  having: order_items.order_count ~ f`0`
+}

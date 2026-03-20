@@ -1,0 +1,158 @@
+// A. Import your transformed view files using relative paths
+import "../1_views/order_items.malloy"
+import "../1_views/users.malloy"
+import "../1_views/inventory_items.malloy"
+import "../1_views/products.malloy"
+import "../1_views/distribution_centers.malloy"
+import "../1_views/events.malloy"
+import "../1_views/event_session_facts.malloy"
+import "../1_views/event_session_funnel.malloy"
+
+// B. Build Bridge Table (Ideally Physical Table Built in DWH)
+--Here is the bridge example in Malloy  with proper aliases for every column in every segment:
+
+
+// 1. ORDER ITEMS
+query: q_order_items is order_items -> {
+  select: 
+    stage is 'order_items',
+    _key_order_items is Order_item_id,
+    _key_users is User_id,
+    _key_inventory_items is Inventory_item_id,
+    _key_products is Product_id,
+    _key_distribution_centers is null::number,         
+    _key_events is null::number,         
+    _key_event_session_facts is null::string,
+    _key_event_session_funnel is null::string
+}
+
+// 2. USERS
+query: q_users is users -> {
+  select: 
+    stage is 'users',
+    _key_order_items is null::number,         
+    _key_users is Id,
+    _key_inventory_items is null::number,         
+    _key_products is null::number,         
+    _key_distribution_centers is null::number,         
+    _key_events is null::number,         
+    _key_event_session_facts is null::string,
+    _key_event_session_funnel is null::string
+}
+
+// 3. INVENTORY ITEMS
+query: q_inventory_items is inventory_items -> {
+  select: 
+    stage is 'inventory_items',
+    _key_order_items is null::number,         
+    _key_users is null::number,         
+    _key_inventory_items is Id,
+    _key_products is Product_id,
+    _key_distribution_centers is Product_distribution_center_id,
+    _key_events is null::number,         
+    _key_event_session_facts is null::string,
+    _key_event_session_funnel is null::string
+}
+
+// 4. PRODUCTS
+query: q_products is products -> {
+  select: 
+    stage is 'products',
+    _key_order_items is null::number,         
+    _key_users is null::number,         
+    _key_inventory_items is null::number,         
+    _key_products is Id,
+    _key_distribution_centers is Distribution_center_id,
+    _key_events is null::number,         
+    _key_event_session_facts is null::string,
+    _key_event_session_funnel is null::string
+}
+
+// 5. DISTRIBUTION CENTERS
+query: q_distribution_centers is distribution_centers -> {
+  select: 
+    stage is 'distribution_centers',
+    _key_order_items is null::number,         
+    _key_users is null::number,         
+    _key_inventory_items is null::number,         
+    _key_products is null::number,         
+    _key_distribution_centers is Id,
+    _key_events is null::number,         
+    _key_event_session_facts is null::string,
+    _key_event_session_funnel is null::string
+}
+
+// 6. EVENTS
+query: q_events is events -> {
+  select: 
+    stage is 'events',
+    _key_order_items is null::number,         
+    _key_users is User_id,
+    _key_inventory_items is null::number,         
+    _key_products is null::number,         
+    _key_distribution_centers is null::number,         
+    _key_events is Id,
+    _key_event_session_facts is Session_id::string,
+    _key_event_session_funnel is Session_id::string
+}
+
+// 7. EVENT SESSION FACTS
+query: q_session_facts is event_session_facts -> {
+  select: 
+    stage is 'event_session_facts',
+    _key_order_items is null::number,         
+    _key_users is null::number,         
+    _key_inventory_items is null::number,         
+    _key_products is null::number,         
+    _key_distribution_centers is null::number,         
+    _key_events is null::number,         
+    _key_event_session_facts is Session_id::string,
+    _key_event_session_funnel is Session_id::string
+}
+
+// 8. EVENT SESSION FUNNEL
+query: q_session_funnel is event_session_funnel -> {
+  select: 
+    stage is 'event_session_funnel',
+    _key_order_items is null::number,         
+    _key_users is null::number,         
+    _key_inventory_items is null::number              ::number,         
+    _key_products is null::number              ::number,         
+    _key_distribution_centers is null::number              ::number,         
+    _key_events is null::number,         
+    _key_event_session_facts is Session_id::string,
+    _key_event_session_funnel is Session_id::string
+}
+
+source: bridge is bigquery.sql("""
+  SELECT * FROM (%{ q_order_items })
+  UNION ALL
+  SELECT * FROM (%{ q_users })
+  UNION ALL
+  SELECT * FROM (%{ q_inventory_items })
+  UNION ALL
+  SELECT * FROM (%{ q_products })
+  UNION ALL
+  SELECT * FROM (%{ q_distribution_centers })
+  UNION ALL
+  SELECT * FROM (%{ q_events })
+  UNION ALL
+  SELECT * FROM (%{ q_session_facts })
+  UNION ALL
+  SELECT * FROM (%{ q_session_funnel })
+""") extend {
+  primary_key: stage
+}
+
+run: bridge -> {
+  group_by:
+    stage
+    _key_order_items
+    _key_users
+    _key_inventory_items
+    _key_products
+    _key_distribution_centers
+    _key_events
+    _key_event_session_facts
+    _key_event_session_funnel
+}

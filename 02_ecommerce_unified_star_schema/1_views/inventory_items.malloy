@@ -1,0 +1,24 @@
+source: inventory_items is bigquery.table('bigquery-public-data.thelook_ecommerce.inventory_items') extend {
+
+  primary_key: Id
+
+  rename:
+    `Id`                             is id
+    `Cost`                           is cost
+    `Created_at`                     is created_at
+    `Product_brand`                  is product_brand
+    `Product_category`               is product_category
+    `Product_department`             is product_department
+    `Product_distribution_center_id` is product_distribution_center_id
+    `Product_id`                     is product_id
+    `Product_name`                   is product_name
+    `Product_retail_price`           is product_retail_price
+    `Product_sku`                    is product_sku
+    `Sold_at`                        is sold_at
+
+  measure: `count` is count()
+
+  view: detail is {
+    select: Id, Product_name, Product_brand, Product_category, Product_id, Cost
+  }
+}

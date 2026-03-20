@@ -1,0 +1,43 @@
+import "../1_views/bridge.malloy" 
+
+
+import "../1_views/order_items.malloy"
+import "../1_views/users.malloy"
+import "../1_views/inventory_items.malloy"
+import "../1_views/products.malloy"
+import "../1_views/distribution_centers.malloy"
+import "../1_views/events.malloy"
+import "../1_views/event_session_facts.malloy"
+import "../1_views/event_session_funnel.malloy"
+
+
+source: ecommerce_explore is bridge extend {
+
+  // Link to Order Management
+  join_one: order_items          on _key_order_items = order_items.Order_item_id
+  join_one: users                on _key_users = users.Id
+  
+  // Link to Product & Inventory
+  join_one: inventory_items      on _key_inventory_items = inventory_items.Id
+  join_one: products             on _key_products = products.Id
+  join_one: distribution_centers on _key_distribution_centers = distribution_centers.Id
+  
+  // Link to Behavioral Data
+  join_one: events               on _key_events = events.Id
+  join_one: event_session_facts  on _key_event_session_facts = event_session_facts.Session_id
+  join_one: event_session_funnel on _key_event_session_funnel = event_session_funnel.Session_id
+
+  measure:
+    conversion is pick order_items.order_count
+                             / events.`count`  
+                            
+                  when events.`count` != 0
+                  else 0
+
+}
+
+run: ecommerce_explore -> {
+  group_by: products.Id
+  aggregate: order_items.order_count
+  having: order_items.order_count ~ f`0`
+}

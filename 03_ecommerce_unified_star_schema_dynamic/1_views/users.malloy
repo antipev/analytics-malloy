@@ -1,0 +1,28 @@
+source: users is bigquery.table('bigquery-public-data.thelook_ecommerce.users') extend {
+
+  primary_key: Id
+
+  rename:
+    `Id`             is id
+    `Age`            is age
+    `City`           is city
+    `Country`        is country
+    `Created_at`     is created_at
+    `Email`          is email
+    `First_name`     is first_name
+    `Gender`         is gender
+    `Last_name`      is last_name
+    `Latitude`       is latitude
+    `Longitude`      is longitude
+    `State`          is state
+    `Street_address` is street_address
+    `Traffic_source` is traffic_source
+    `Postal_code`    is postal_code
+    `User_geom`      is user_geom
+
+  measure: `count` is count()
+
+  view: detail is {
+    select: Id, Last_name, First_name, City, State, Country, Email
+  }
+}

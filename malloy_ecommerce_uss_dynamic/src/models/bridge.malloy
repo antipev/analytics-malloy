@@ -1,0 +1,21 @@
+// A. Build Bridge Table (View in DWH)
+
+source: bridge is bigquery.sql("""
+  SELECT 'order_items'          AS stage
+  UNION ALL
+  SELECT 'users'                AS stage
+  UNION ALL
+  SELECT 'inventory_items'      AS stage
+  UNION ALL
+  SELECT 'products'             AS stage
+  UNION ALL
+  SELECT 'distribution_centers' AS stage
+  UNION ALL
+  SELECT 'events'               AS stage
+  UNION ALL
+  SELECT 'session_facts'        AS stage 
+  UNION ALL
+  SELECT 'event_session_funnel' AS stage 
+""") extend {
+  primary_key: stage
+}

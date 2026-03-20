@@ -1,0 +1,14 @@
+import "../1_views/order_items.malloy"
+import "../1_views/users.malloy"
+import "../1_views/inventory_items.malloy"
+import "../1_views/products.malloy"
+import "../1_views/distribution_centers.malloy"
+
+// Defining the Explore structure as a source
+source: order_items_explore is order_items extend {
+  join_one: 
+    users                on User_id = users.Id
+    inventory_items      on Inventory_item_id = inventory_items.Id
+    products             on inventory_items.Product_id = products.Id
+    distribution_centers on products.Distribution_center_id = distribution_centers.Id
+}

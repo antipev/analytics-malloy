@@ -1,0 +1,15 @@
+source: inventory_items is bigquery.table('bigquery-public-data.thelook_ecommerce.inventory_items') extend {
+  primary_key: inventory_item_id
+  dimension: inventory_item_id is id
+
+  measure: inventory_item_count is count()
+
+  view: detail is {
+    select: 
+      inventory_item_id, 
+      product_name, 
+      product_brand, 
+      cost, 
+      created_at
+  }
+}
