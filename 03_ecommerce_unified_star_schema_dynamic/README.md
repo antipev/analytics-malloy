@@ -105,13 +105,17 @@ ORDER BY 2 desc NULLS LAST
 | **Scalability**            | Fixed to pre-built IDs     | Adapts to active fact tables |
 
 
-## Additional tests different case:
+### Additional tests different case:
 Table 1: 1.4 Billion rows, 3.15 TB  (logical bytes)
+
 Table 2: 57  Million rows, 77.57 GB (logical bytes)
+
 Physical Bridge: UNION of ID from Table 1 and table 2
+
 Physical Bridge: 2 rows
 
-| Metric                     | Option 1 (Physical Bridge) | Option 2 (c)    |
+
+| Metric                     | Option 1 (Physical Bridge) | Option 2 (Dynamic Bridge)    |
 | :---                       | :---                       | :---                         |
 | **Query Execution Time**   | 11 sec                     | 15 sec                       |
 | **Data Processed (Query)** | 96.5 GB (96.5 GB billed)   | 1.48 GB (1.48 GB billed)     |
