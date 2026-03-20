@@ -38,14 +38,15 @@ source: bridge is bigquery.sql("""
 ## Option 1: BRIDGE MALLOY/SQL EXAMPLE:
 
 ### MALLOY:
-run: ecommerce_explore -> {
+```run: ecommerce_explore -> {
   group_by: products.Id
   aggregate: order_items.order_count
   having: order_items.order_count ~ f`0`
 }
+```
 
 ### SQL
-SELECT 
+```SELECT 
    products_0.`id` as `Id`,
    count(distinct order_items_0.`order_id`) as `order_count`
 FROM `PROJECT.DATASET.bridge_ecommerce`as base
@@ -56,6 +57,7 @@ FROM `PROJECT.DATASET.bridge_ecommerce`as base
 GROUP BY 1
 HAVING (count(distinct order_items_0.`order_id`)) = 0
 ORDER BY 2 desc NULLS LAST
+```
 
 #### //Bytes processed 9.72 MB, Bytes billed 30 MB. Elapsed time 376 ms.
 #### Bytes processed to CREATE BRIDGE 208.84 MB, Bytes billed 209 MB. Elapsed time 23.66 sec //
@@ -71,7 +73,7 @@ run: ecommerce_explore -> {
 }
 
 ### SQL
-SELECT 
+```SELECT 
    products_0.`id` as `Id`,
    count(distinct order_items_0.`order_id`) as `order_count`
 FROM (
@@ -88,7 +90,8 @@ FROM (
   ON inventory_items_0.`product_id`=products_0.`id`
 GROUP BY 1
 HAVING (count(distinct order_items_0.`order_id`)) = 0
-ORDER BY 2 desc NULLS LAST
+ORDER BY 2 desc NULLS LAST`
+```
 
 #### //Bytes processed 10.46 MB, Bytes billed 30 MB. Elapsed time 533 ms//
 
