@@ -8,20 +8,20 @@ The goal of this "analytics-malloy" project is to experiment with the Unified St
 * Malloy
 
 ## Steps:
-### 1. Copy Traditional Looker Model as representation of Semantic Layer
+### 1. [Copy Traditional Looker Model as representation of Semantic Layer](./00_ecommerce_looker)
 It shows how data is traditionally organized into "Views" and "Models" (star schemas) within a Looker BI tool.
 
-### 2. Direct Conversion to Malloy
+### 2. [Direct Conversion to Malloy](./01_ecommerce_malloy)
 The same Looker logic, but converted into Malloy. This allows the model to be open-source and run directly in VS Code without needing a Looker license.
 
 For visibility of 2 star schemas: two models are presented as 2 separate Malloy files: `events_explore.malloy`, `order_items_explore.malloy`.
 
-### 3. Unified Star Schema (USS)
+### 3. [Unified Star Schema (USS)](./02_ecommerce_unified_star_schema)
 Implementation of Francesco Puppini’s Unified Star Schema. Instead of separate "silos" for Orders and Events, we use a Bridge Table to connect everything into one single, searchable model.
 
 So two separate models from previous step got converted again in one file: `ecommerce_explore.malloy`. However, at this time it uses Bridge as central table.
 
-### 4. Dynamic Bridge Experiment
+### 4. [Dynamic Bridge Experiment](./03_ecommerce_unified_star_schema_dynamic)
 An experimental, "virtual" version of the Bridge Table. Instead of building a massive physical table in the database, this version generates a bridge on the fly.
 
 ---
