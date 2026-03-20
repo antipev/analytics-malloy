@@ -11,7 +11,8 @@ Instead of pre-processing a massive Bridge table in the Data Warehouse or creati
 
 The Bridge is defined as a two-row (or depending on how many facts you want to link) SQL block within `bridge.malloy`:
 
-```malloy
+```
+malloy
 source: bridge is bigquery.sql("""
   SELECT "events"      AS stage
   UNION ALL
@@ -38,7 +39,8 @@ source: bridge is bigquery.sql("""
 ## Option 1: BRIDGE MALLOY/SQL EXAMPLE:
 
 ### MALLOY:
-```run: ecommerce_explore -> {
+```
+run: ecommerce_explore -> {
   group_by: products.Id
   aggregate: order_items.order_count
   having: order_items.order_count ~ f`0`
@@ -67,11 +69,13 @@ ORDER BY 2 desc NULLS LAST
 ## Option 2: DYNAMIC BRIDGE SQL EXAMPLE:
 
 ### MALLOY:
+```
 run: ecommerce_explore -> {
   group_by: products.Id
   aggregate: order_items.order_count
   having: order_items.order_count ~ f`0`
 }
+```
 
 ### SQL
 ```
