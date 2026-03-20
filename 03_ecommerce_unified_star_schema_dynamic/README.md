@@ -57,8 +57,8 @@ GROUP BY 1
 HAVING (count(distinct order_items_0.`order_id`)) = 0
 ORDER BY 2 desc NULLS LAST
 
-## //Bytes processed 9.72 MB, Bytes billed 30 MB. Elapsed time 376 ms.
-## Bytes processed to CREATE BRIDGE 208.84 MB, Bytes billed 209 MB. Elapsed time 23.66 sec //
+#### //Bytes processed 9.72 MB, Bytes billed 30 MB. Elapsed time 376 ms.
+#### Bytes processed to CREATE BRIDGE 208.84 MB, Bytes billed 209 MB. Elapsed time 23.66 sec //
 
 
 ## Option 2: DYNAMIC BRIDGE SQL EXAMPLE:
@@ -90,7 +90,7 @@ GROUP BY 1
 HAVING (count(distinct order_items_0.`order_id`)) = 0
 ORDER BY 2 desc NULLS LAST
 
-## //Bytes processed 10.46 MB, Bytes billed 30 MB. Elapsed time 533 ms//
+#### //Bytes processed 10.46 MB, Bytes billed 30 MB. Elapsed time 533 ms//
 
 
 
