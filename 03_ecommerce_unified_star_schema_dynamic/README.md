@@ -13,7 +13,7 @@ The Bridge is defined as a two-row (or depending on how many facts you want to l
 
 ```malloy
 source: bridge is bigquery.sql("""
-  SELECT "events" AS stage
+  SELECT "events"      AS stage
   UNION ALL
   SELECT "order_items" AS stage
 """) extend {
