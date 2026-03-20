@@ -26,6 +26,6 @@ The model files define:
 * **B. The Explores (JOINS):** Defines how different views join together to form the user-facing interface.
 
 ![Traditional Looker Structure](./Traditional_Folder_Structure_Looker.jpeg)
-
+![Traditional Data Model](./Traditional_Data_Model_Looker.png)
 ---
 

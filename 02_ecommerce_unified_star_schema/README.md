@@ -25,4 +25,4 @@ In a production environment, a physical table unioning all 8 stages would typica
 * **1_views/**: Contains individual Malloy sources and the `bridge.malloy` union logic.
 * **2_models/**: Contains `ecommerce_explore.malloy`, the final unified semantic layer.
 
-
+![USS Data Model](./USS_Data_Model_Malloy.png)
