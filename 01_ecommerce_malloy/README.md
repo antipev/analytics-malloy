@@ -43,3 +43,4 @@ The model files act as extended **Sources**. They import the previously created 
 * Similar to LookerML, these models are the entry point for the end-user and can be explore directly in VS Code or [Published for exploration](https://docs.malloydata.dev/documentation/user_guides/publishing/publishing).
 
 ---
+* Note: In Original LookerML the file `training_ecommerce.model` there are 2 explore files in one: they are not connected to each other (`explore: events`,`explore: order_items`). Therefore in Malloy for visibility purposes they are separeted on two files: `events_explore` and `events_explore`.
