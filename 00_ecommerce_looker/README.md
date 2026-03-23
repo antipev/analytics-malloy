@@ -11,7 +11,7 @@ This repository demonstrates a **Traditional Star Schema** setup within Looker (
 Following the [blueprint for a scalable LookML layered structure](https://discuss.google.dev/t/a-blueprint-for-scalable-lookml-layered-structure/193354), the project is organized into distinct layers:
 
 ### 1. Views (`/views`)
-Each file represents an underlying database table where we define specific dimensions and measures. Based on the project structure, the following views are included:
+Each file represents an underlying database table where specific dimensions and measures are defined. Based on the project structure, the following views are included:
 * `distribution_centers.view`
 * `events.view`
 * `inventory_items.view`
