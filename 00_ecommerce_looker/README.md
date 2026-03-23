@@ -1,7 +1,7 @@
 # 00_ecommerce_looker
 
 This folder contains examples of LookML files connected to the BigQuery Public Dataset: [theLook eCommerce](https://console.cloud.google.com/marketplace/product/bigquery-public-data/thelook-ecommerce).
-"LookML is essentially a SQL abstraction. Folk using Looker for BI purposes can write the language vs. writing sushi-grade SQL." (https://whynowtech.substack.com/p/malloy-data)
+"LookML is essentially a SQL abstraction. Folks using Looker for BI purposes can write the language vs. writing sushi-grade SQL." (https://whynowtech.substack.com/p/malloy-data)
 
 ---
 

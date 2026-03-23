@@ -1,6 +1,6 @@
 # analytics-malloy
 
-This repository explores the evolution of data modeling from traditional to modern: Unified Star Schema (USS), using open-source semantic layers: Malloy.
+This repository explores the evolution of data modeling from traditional to modern: Unified Star Schema (USS), using open-source semantic layer: Malloy.
 
 ## Purpose
 The goal of the "analytics-malloy" project is experimentation with Unified Star Schema (USS) modeling, using:
