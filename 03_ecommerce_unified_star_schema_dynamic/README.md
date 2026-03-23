@@ -121,7 +121,7 @@ Table 2: 57  Million rows, 77.57 GB (logical bytes)
 
 Physical Bridge: UNION of ID from Table 1 and table 2
 
-Physical Bridge: 2 rows
+Dynamic Bridge: 2 rows
 
 
 | Metric                     | Option 1 (Physical Bridge) | Option 2 (Dynamic Bridge)    |
