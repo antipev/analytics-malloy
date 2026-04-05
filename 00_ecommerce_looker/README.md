@@ -1,5 +1,5 @@
 # 00_ecommerce_looker
-
+---
 This folder contains examples of LookML files connected to the BigQuery Public Dataset: [theLook eCommerce](https://console.cloud.google.com/marketplace/product/bigquery-public-data/thelook-ecommerce).
 "LookML is essentially a SQL abstraction. Folks using Looker for BI purposes can write the language vs. writing sushi-grade SQL." (https://whynowtech.substack.com/p/malloy-data)
 Source: https://github.com/lptais/tais-dev-looker-ecommerce/tree/master/models
@@ -26,8 +26,9 @@ The model files define:
 * **B. The Explores (JOINS):** Defines how different views join together to form the user-facing interface.
 
 ![Traditional Looker Structure](./Traditional_Folder_Structure_Looker.png)
+
 ![Traditional Data Model](./Traditional_Data_Model_Looker.png)
 
-* Note "Order" view is not ised in Explore - wonder why?
+* Note "Order" view is not listed in Explore - wonder why?
 ---
 
