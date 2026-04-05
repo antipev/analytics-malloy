@@ -1,9 +1,9 @@
 source: order_items is bigquery.table('bigquery-public-data.thelook_ecommerce.order_items') extend {
 
-  primary_key: Order_item_id
+  primary_key: Id
 
   rename:
-    `Order_item_id`     is id
+    `Id`                is id
     `Created_at`        is created_at
     `Delivered_at`      is delivered_at
     `Inventory_item_id` is inventory_item_id
@@ -24,6 +24,6 @@ source: order_items is bigquery.table('bigquery-public-data.thelook_ecommerce.or
     total_revenue_from_completed_orders is sum(Sale_price) { where: Status = 'Complete' }
 
   view: detail is {
-    select: Order_item_id, User_id, Inventory_item_id, Sale_price, Status, Created_at
+    select: Id, User_id, Inventory_item_id, Sale_price, Status, Created_at
   }
 }

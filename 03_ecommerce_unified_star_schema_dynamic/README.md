@@ -7,16 +7,16 @@ While [the previous step](../02_ecommerce_unified_star_schema/README.md) utilize
 ---
 
 ### How it works:
-Instead of pre-processing a massive Bridge table in the Data Warehouse or creating the view approach found in [recent research regarding LLM-driven schema virtualization](https://medium.com/@irregularbi/how-i-virtualized-a-unified-star-schema-using-llm-7e69cd40a734), this approach generates the Bridge on the fly using a simple two-row SQL source. 
+Instead of pre-processing a massive Bridge table in the Data Warehouse or creating the view approach found in [recent research regarding LLM-driven schema virtualization](https://medium.com/@irregularbi/how-i-virtualized-a-unified-star-schema-using-llm-7e69cd40a734), this approach generates the Bridge on the fly using a simple X-row SQL source (X - each selected table counted as one row). 
 
 The Bridge is defined as a two-row (or depending on how many facts you want to link) SQL block within `bridge.malloy`:
 
 ```
 malloy
 source: bridge is bigquery.sql("""
-  SELECT "events"      AS stage
+  SELECT  "order_items"      AS stage,
   UNION ALL
-  SELECT "order_items" AS stage
+  SELECT  "events"           AS stage,
 """) extend {
   primary_key: stage
 }

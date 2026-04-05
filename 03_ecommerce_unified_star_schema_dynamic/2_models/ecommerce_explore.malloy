@@ -11,11 +11,13 @@ import "../1_views/distribution_centers.malloy"
 import "../1_views/events.malloy"
 import "../1_views/event_session_facts.malloy"
 import "../1_views/event_session_funnel.malloy"
+import "../1_views/orders.malloy"
 
 
 source: ecommerce_explore is bridge extend {
 
    join_one: order_items               on stage = "order_items" 
+   join_one: orders                    on stage = "order_items" and order_items.Order_id = orders.Order_id
    join_one: events                    on stage = "events"
  
    join_one: users                full on users.Id = coalesce(order_items.User_id, events.User_id) // selects only ids that exist in fact tables!!
@@ -39,4 +41,20 @@ run: ecommerce_explore -> {
   group_by: products.Id
   aggregate: order_items.order_count
   having: order_items.order_count ~ f`0`
+}
+
+run: ecommerce_explore -> {
+  group_by: users.Id
+  aggregate:
+    order_items.total_revenue
+    orders.total_num_of_item
+    events.`count`
+}
+
+run: ecommerce_explore -> {
+  group_by: users.Country
+  aggregate:
+    order_items.total_revenue
+    orders.total_num_of_item
+    events.`count`
 }

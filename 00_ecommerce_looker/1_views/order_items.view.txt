@@ -1,42 +1,35 @@
+# The name of this view in Looker is "Order Items"
 view: order_items {
-  sql_table_name: `cloud-training-demos.looker_ecomm.order_items`
-    ;;
-  drill_fields: [order_item_id]
+  # The sql_table_name parameter indicates the underlying database table
+  # to be used for all fields in this view.
+  sql_table_name: `bigquery-public-data.thelook_ecommerce.order_items` ;;
+  drill_fields: [id, orders.order_id, products.id, products.name]
 
-  dimension: order_item_id {
+  # This primary key is the unique key for this table in the underlying database.
+  # You need to define a primary key in a view in order to join to other views.
+
+  dimension: id {
     primary_key: yes
     type: number
     sql: ${TABLE}.id ;;
   }
+  # Dates and timestamps can be represented in Looker using a dimension group of type: time.
+  # Looker converts dates and timestamps to the specified timeframes within the dimension group.
 
   dimension_group: created {
     type: time
-    timeframes: [
-      raw,
-      time,
-      date,
-      week,
-      month,
-      quarter,
-      year
-    ]
+    timeframes: [raw, time, date, week, month, month_name, quarter, year]
     sql: ${TABLE}.created_at ;;
   }
 
   dimension_group: delivered {
     type: time
-    timeframes: [
-      raw,
-      date,
-      week,
-      month,
-      quarter,
-      year
-    ]
-    convert_tz: no
-    datatype: date
+    timeframes: [raw, time, date, week, month, month_name, quarter, year]
     sql: ${TABLE}.delivered_at ;;
   }
+    # Here's what a typical dimension looks like in LookML.
+    # A dimension is a groupable field that can be used to filter query results.
+    # This dimension will be called "Inventory Item ID" in Explore.
 
   dimension: inventory_item_id {
     type: number
@@ -46,20 +39,19 @@ view: order_items {
 
   dimension: order_id {
     type: number
+    # hidden: yes
     sql: ${TABLE}.order_id ;;
+  }
+
+  dimension: product_id {
+    type: number
+    # hidden: yes
+    sql: ${TABLE}.product_id ;;
   }
 
   dimension_group: returned {
     type: time
-    timeframes: [
-      raw,
-      time,
-      date,
-      week,
-      month,
-      quarter,
-      year
-    ]
+    timeframes: [raw, time, date, week, month, month_name, quarter, year]
     sql: ${TABLE}.returned_at ;;
   }
 
@@ -70,16 +62,7 @@ view: order_items {
 
   dimension_group: shipped {
     type: time
-    timeframes: [
-      raw,
-      date,
-      week,
-      month,
-      quarter,
-      year
-    ]
-    convert_tz: no
-    datatype: date
+    timeframes: [raw, time, date, week, month, month_name, quarter, year]
     sql: ${TABLE}.shipped_at ;;
   }
 
@@ -94,47 +77,67 @@ view: order_items {
     sql: ${TABLE}.user_id ;;
   }
 
-
-  measure: average_sale_price {
-    type: average
-    sql: ${sale_price} ;;
-    drill_fields: [detail*]
-    value_format_name: usd_0
-  }
-
-  measure: order_item_count {
-    type: count
-    drill_fields: [detail*]
-  }
-
-  measure: order_count {
-    type: count_distinct
-    sql: ${order_id} ;;
-  }
+  # A measure is a field that uses a SQL aggregate function. Here are defined sum and average
+  # measures for this dimension, but you can also add measures of many different aggregates.
+  # Click on the type parameter to see all the options in the Quick Help panel on the right.
 
   measure: total_revenue {
     type: sum
     sql: ${sale_price} ;;
-    value_format_name: usd
-  }
+    value_format: "$0.00"}
 
-  measure: total_revenue_from_completed_orders {
+  measure: total_revenue_completed_orders {
     type: sum
     sql: ${sale_price} ;;
-    filters: [status: "Complete"]
-    value_format_name: usd
+    filters:  [status: "Complete"]
+    value_format: "$0.00"
+    }
+
+  measure: order_count {
+    type: count_distinct
+    sql: ${order_id} ;;
+    drill_fields: [order_id, total_revenue]
+  }
+
+  measure: order_item_count {
+    type: count_distinct
+    sql: ${id} ;;
+  }
+
+  measure: total_users {
+    type: count_distinct
+    sql: ${user_id} ;;
+  }
+
+  measure: average_sale_price {
+    type: average
+    sql: ${sale_price} ;;
+  }
+
+  measure: average_spend_per_user {
+    type: number
+    sql: ${total_revenue}/${total_users} ;;
+  }
+
+  measure: average_order_value {
+    type: number
+    sql: ${total_revenue}/${order_count} ;;
   }
 
 
   # ----- Sets of fields for drilling ------
   set: detail {
     fields: [
-      order_item_id,
-      users.last_name,
-      users.id,
-      users.first_name,
-      inventory_items.id,
-      inventory_items.product_name
-    ]
+  id,
+  products.name,
+  products.id,
+  orders.order_id,
+  users.last_name,
+  users.id,
+  users.first_name,
+  inventory_items.id,
+  inventory_items.product_name,
+  ]
   }
+
 }

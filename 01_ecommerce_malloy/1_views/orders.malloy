@@ -1,0 +1,29 @@
+source: orders is bigquery.table('bigquery-public-data.thelook_ecommerce.orders') extend {
+  primary_key: Order_id
+
+  rename:
+    `Order_id` is order_id
+    `Created_at` is created_at
+    `Delivered_at` is delivered_at
+    `Gender` is gender
+    `Num_of_item` is num_of_item
+    `Returned_at` is returned_at
+    `Shipped_at` is shipped_at
+    `Status` is status
+    `User_id` is user_id
+
+  measure:
+    total_num_of_item is sum(Num_of_item)
+    average_num_of_item is avg(Num_of_item)
+    order_count is count()
+
+  view: detail is {
+    select: 
+      Order_id, 
+      User_id, 
+      Gender, 
+      Status, 
+      Num_of_item, 
+      Created_at
+  }
+}

@@ -1,3 +1,5 @@
+//Source: https://github.com/CloudVLab/qwiklabs-ecommerce/blob/master/views/event_session_facts.view.lkml
+
 view: event_session_facts {
   derived_table: {
     sql:
