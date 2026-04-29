@@ -37,24 +37,24 @@ source: ecommerce_explore is bridge extend {
 
 }
 
-run: ecommerce_explore -> {
-  group_by: products.Id
-  aggregate: order_items.order_count
-  having: order_items.order_count = 0
-}
+-- run: ecommerce_explore -> {
+--   group_by: products.Id
+--   aggregate: order_items.order_count
+--   having: order_items.order_count = 0
+-- }
 
-run: ecommerce_explore -> {
-  group_by: users.Id
-  aggregate:
-    order_items.total_revenue
-    orders.total_num_of_item
-    events.`count`
-}
+-- run: ecommerce_explore -> {
+--   group_by: users.Id
+--   aggregate:
+--     order_items.total_revenue
+--     orders.total_num_of_item
+--     events.`count`
+-- }
 
-run: ecommerce_explore -> {
-  group_by: users.Country
-  aggregate:
-    order_items.total_revenue
-    orders.total_num_of_item
-    events.`count`
-}
+-- run: ecommerce_explore -> {
+--   group_by: users.Country
+--   aggregate:
+--     order_items.total_revenue
+--     orders.total_num_of_item
+--     events.`count`
+-- }
