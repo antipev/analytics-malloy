@@ -30,9 +30,9 @@ source: ecommerce_explore is bridge extend {
 
   measure:
     conversion is pick order_items.order_count
-                             / events.`count`  
+                             / events.events_count  
                             
-                  when events.`count` != 0
+                  when events.events_count != 0
                   else 0
 
 }
